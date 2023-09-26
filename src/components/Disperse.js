@@ -77,42 +77,59 @@ const handleSubmit=()=>{
 
   // Validate Ethereum addresses and other errors
   arrOfAddress.forEach((a,index)=>{
-    if(!validateInputAddresses(a)){
-     if(a.length>1 && a.substring(0,2) !== "0x"){
-      errorObj.push({error: "Line "+(index+1)+" invalid Ethereum address", isDuplicateError: false}) 
-     }
-     if(a.includes("=") && a.substring(2,a.indexOf('=')).length !== 40){
-      errorObj.push({error: "Line "+(index+1)+" invalid Ethereum address", isDuplicateError: false}) 
-     }
-     if(a.includes(",") && a.substring(2,a.indexOf(',')).length !== 40){
-      errorObj.push({error: "Line "+(index+1)+" invalid Ethereum address", isDuplicateError: false}) 
-     }
-     if(a.includes(" ") && a.substring(2,a.indexOf(' ')).length !== 40){
-      errorObj.push({error: "Line "+(index+1)+" invalid Ethereum address", isDuplicateError: false}) 
-     }
-     if(a.includes("=") || a.includes(",") || a.includes(" ")){
-      if(a.includes("=")){
-        let isNum = /^\d+$/.test(a.substring(a.indexOf("=")+1,a.length));
-        if(!isNum){
-          errorObj.push({error: "Line "+(index+1)+" wrong amount", isDuplicateError: false}) 
+    if(a.length>1){
+      if(!validateInputAddresses(a)){
+        let error = false;
+        if(a.substring(0,2) !== "0x"){
+         errorObj.push({error: "Line "+(index+1)+" invalid Ethereum address", isDuplicateError: false}) 
+         error = true;
         }
-      }
-      if(a.includes(",")){
-        let isNum = /^\d+$/.test(a.substring(a.indexOf(",")+1,a.length));
-        if(!isNum){
-          errorObj.push({error: "Line "+(index+1)+" wrong amount", isDuplicateError: false}) 
+        if(!error){
+          if(a.includes("=") && a.substring(2,a.indexOf('=')).length !== 40){
+            errorObj.push({error: "Line "+(index+1)+" invalid Ethereum address", isDuplicateError: false}) 
+            error = true;
+           }
+           if(a.includes(",") && a.substring(2,a.indexOf(',')).length !== 40){
+            errorObj.push({error: "Line "+(index+1)+" invalid Ethereum address", isDuplicateError: false}) 
+            error = true;
+           }
+           if(a.includes(" ") && a.substring(2,a.indexOf(' ')).length !== 40){
+            errorObj.push({error: "Line "+(index+1)+" invalid Ethereum address", isDuplicateError: false}) 
+            error = true;
+           }
         }
-      }
-      if(a.includes(" ")){
-        let isNum = /^\d+$/.test(a.substring(a.indexOf(" ")+1,a.length));
-        if(!isNum){
-          errorObj.push({error: "Line "+(index+1)+" wrong amount", isDuplicateError: false}) 
+        
+        if((a.includes("=") || a.includes(",") || a.includes(" ")) && !error){
+         if(a.includes("=")){
+           let isNum = /^\d+$/.test(a.substring(a.indexOf("=")+1,a.length));
+           if(!isNum){
+             errorObj.push({error: "Line "+(index+1)+" wrong amount", isDuplicateError: false}) 
+             error = true;
+           }
+         }
+         if(a.includes(",")){
+           let isNum = /^\d+$/.test(a.substring(a.indexOf(",")+1,a.length));
+           if(!isNum){
+             errorObj.push({error: "Line "+(index+1)+" wrong amount", isDuplicateError: false}) 
+             error = true;
+           }
+         }
+         if(a.includes(" ")){
+           let isNum = /^\d+$/.test(a.substring(a.indexOf(" ")+1,a.length));
+           if(!isNum){
+             errorObj.push({error: "Line "+(index+1)+" wrong amount", isDuplicateError: false}) 
+             error = true;
+           }
+         }
+        }else if(!error){
+         errorObj.push({error: "Line "+(index+1)+" invalid Ethereum address", isDuplicateError: false})
+         error = true;
         }
-      }
-     }else{
-      errorObj.push({error: "Line "+(index+1)+" invalid Ethereum address", isDuplicateError: false})
-     }
+       }
+    }else{
+      errorObj.push({error: "Please add valid Ethereum address at line "+(index+1), isDuplicateError: false})
     }
+    
   })
   setError(errorObj);
 }
