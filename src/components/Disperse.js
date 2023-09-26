@@ -78,7 +78,7 @@ const handleSubmit=()=>{
   // Validate Ethereum addresses and other errors
   arrOfAddress.forEach((a,index)=>{
     if(!validateInputAddresses(a)){
-     if(a.substring(0,2) !== "0x"){
+     if(a.length>1 && a.substring(0,2) !== "0x"){
       errorObj.push({error: "Line "+(index+1)+" invalid Ethereum address", isDuplicateError: false}) 
      }
      if(a.includes("=") && a.substring(2,a.indexOf('=')).length !== 40){
@@ -135,7 +135,7 @@ const handleSubmit=()=>{
           ))}
         </div>
         <textarea
-          className='flex-1 border border-2 border-black border-l-slate-400 p-2 resize-none text-white bg-black text-[10px] md:text-sm md:font-semibold'
+          className='flex-1 border border-2 border-black border-l-slate-400 p-2 resize-none text-white bg-black text-[10px] md:text-sm md:font-semibold focus:outline-none'
           value={text}
           onChange={handleTextareaChange}
           rows={10}
